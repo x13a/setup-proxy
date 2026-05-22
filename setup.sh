@@ -167,7 +167,7 @@ main() {
     set_caddy_env
     copy_compose_file
     set_panel_path
-    echo "[*] panel is available at: https://${VARS[domain]}${VARS[panel_path]}"
+    echo "[*] panel is available at: https://${VARS[domain]}${VARS[panel_path]}/"
     echo "[*] panel params file: ${VARS[caddy_env]}"
     echo "[+] done, reboot"
 }
