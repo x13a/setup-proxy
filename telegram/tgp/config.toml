@@ -1,3 +1,0 @@
-listen_url = "0.0.0.0:8000"
-secret = "SOME_SECRET"
-host = "tg.example.org:443"

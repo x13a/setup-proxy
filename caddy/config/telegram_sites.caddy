@@ -1,4 +1,0 @@
-# active probing handler
-{$TELEGRAM_PROXY_SUBDOMAIN}.{$DOMAIN} {
-    import "./abort_file_server.caddy"
-}

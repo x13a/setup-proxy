@@ -59,7 +59,6 @@ main() {
     set_env "PROXY_WEBSOCKET_WARP_PATH" "$(gen_ws_path "ws-warp")"
     set_env "CDN_AUTH_TOKEN" "$(hmac_hex "$HMAC_SECRET_KEY" "cdn-auth-token" 32)"
     set_env "SIGNAL_PROXY_SUBDOMAIN" "sig-$(hmac_hex "$HMAC_SECRET_KEY" "signal-subdomain" 8)"
-    set_env "TELEGRAM_PROXY_SUBDOMAIN" "tg-$(hmac_hex "$HMAC_SECRET_KEY" "telegram-subdomain" 8)"
     echo "[+] done"
 }
 
