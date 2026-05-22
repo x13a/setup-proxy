@@ -1,5 +1,0 @@
-sub vcl_fetch {
-  if (beresp.http.Content-Type ~ "event-stream") {
-    set beresp.do_stream = true;
-  }
-}
