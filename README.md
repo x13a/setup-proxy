@@ -1,8 +1,8 @@
 # setup-proxy
 
-Proxy bootstrap
+Proxy Server Bootstrap Script
 
-You must have a server and domain name for this.
+You must have domain name for this.
 
 ## Usage
 
