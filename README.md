@@ -1,6 +1,6 @@
 # setup-proxy
 
-Proxy over CDN bootstrap
+Proxy bootstrap
 
 You must have a server and domain name for this.
 
@@ -23,20 +23,11 @@ Now you have to configure DNS records.
 Caddy is set to use following subdomains:
 
 ```env
-# CDN origin, direct connection, token protected
-ORIGIN_SUBDOMAIN=origin
-# CDN, token protected
-CLOUDFLARE_SUBDOMAIN=cloudflare.cdn
-# ip lookup, direct connection
 IP_SUBDOMAIN=ip
 
 # redir to your domain
-# default CDN, token protected
 # www
 ```
-
-CDN has to set request header to be able to connect.  
-*X-Auth-Token* is used for this.
 
 ## License
 
