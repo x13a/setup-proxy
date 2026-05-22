@@ -66,23 +66,12 @@ set_caddy_env() {
     echo "[*] executed $set_env_script with ENV_FILE=$env_file"
 }
 
-cp_compose_file() {
+copy_compose_file () {
     local src_file="$BASE_DIR/compose/${VARS[panel]}.yml"
     local dst_file="$BASE_DIR/compose.yml"
     [[ -f "$src_file" ]] || { echo "error: $src_file not found, exit" >&2; exit 1; }
     cp "$src_file" "$dst_file"
     echo "[*] copied $src_file to $dst_file"
-}
-
-install_sqlite() {
-    if command -v sqlite3 >/dev/null 2>&1; then
-        echo "[*] sqlite3 already installed"
-        return 0
-    fi
-    echo "[*] installing sqlite3..."
-    sudo apt-get update
-    sudo apt-get install -y sqlite3
-    echo "[+] sqlite3 installed"
 }
 
 init_panel_db() {
@@ -102,23 +91,21 @@ init_panel_db() {
 }
 
 set_panel_path() {
-    local db_path="$BASE_DIR/panel/${VARS[panel]}/db"
-    local db_file path_var
-    if is_sui; then
-        db_file="$db_path/s-ui.db"
-        path_var="webPath"
-    else
-        db_file="$db_path/x-ui.db"
-        path_var="webBasePath"
-    fi
     local env_file="${VARS[caddy_env]}"
-    [[ -f "$db_file" ]] || { echo "error: $db_file not found, exit" >&2; exit 1; }
-    local panel_path
-    panel_path="$(grep -E '^PANEL_PATH=' "$env_file" | cut -d'=' -f2-)"
+    local panel_path="$(grep -E '^PANEL_PATH=' "$env_file" | cut -d'=' -f2-)"
     [[ -z "$panel_path" ]] && { echo "error: PANEL_PATH is empty in $env_file, exit" >&2; exit 1; }
-    sudo sqlite3 "$db_file" "UPDATE settings SET value='$panel_path' WHERE key='$path_var';"
+    local compose_file="$BASE_DIR/compose.yml"
+    echo "[*] starting docker compose to initialize database..."
+    docker compose -f "$compose_file" up -d
+    local panel="${VARS[panel]}"
+    if [ "$panel" = "3x-ui" ] || [ "$panel" = "x-ui" ]; then
+        docker exec -it $panel sh -c "/app/x-ui setting -webBasePath '$panel_path'"
+    elif [ "$panel" = "s-ui" ]; then
+        docker exec -it $panel sh -c "/app/sui setting -path '$panel_path'"
+    fi
+    docker compose -f "$compose_file" down
+    echo "[*] docker compose stopped"
     VARS[panel_path]="$panel_path"
-    echo "[*] updated $path_var in $db_file to '$panel_path'"
 }
 
 ask_panel() {
@@ -178,9 +165,7 @@ main() {
     handle_domain
     handle_panel
     set_caddy_env
-    cp_compose_file
-    init_panel_db
-    install_sqlite
+    copy_compose_file
     set_panel_path
     echo "[*] panel is available at: https://${VARS[domain]}${VARS[panel_path]}"
     echo "[*] panel params file: ${VARS[caddy_env]}"
