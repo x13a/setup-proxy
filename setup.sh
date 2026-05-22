@@ -91,7 +91,7 @@ init_panel_db() {
     docker compose -f "$compose_file" up -d
     echo "[*] waiting for n seconds for database initialization..."
     for i in {1..10}; do
-        if compgen -G "$BASE_DIR/${VARS[panel]}/db/*.db" > /dev/null; then
+        if compgen -G "$BASE_DIR/panel/${VARS[panel]}/db/*.db" > /dev/null; then
             echo "[*] database initialized"
             break
         fi
@@ -102,7 +102,7 @@ init_panel_db() {
 }
 
 set_panel_path() {
-    local db_path="$BASE_DIR/${VARS[panel]}/db"
+    local db_path="$BASE_DIR/panel/${VARS[panel]}/db"
     local db_file path_var
     if is_sui; then
         db_file="$db_path/s-ui.db"
@@ -116,7 +116,7 @@ set_panel_path() {
     local panel_path
     panel_path="$(grep -E '^PANEL_PATH=' "$env_file" | cut -d'=' -f2-)"
     [[ -z "$panel_path" ]] && { echo "error: PANEL_PATH is empty in $env_file, exit" >&2; exit 1; }
-    sqlite3 "$db_file" "UPDATE settings SET value='$panel_path' WHERE key='$path_var';"
+    sudo sqlite3 "$db_file" "UPDATE settings SET value='$panel_path' WHERE key='$path_var';"
     VARS[panel_path]="$panel_path"
     echo "[*] updated $path_var in $db_file to '$panel_path'"
 }
@@ -182,7 +182,7 @@ main() {
     init_panel_db
     install_sqlite
     set_panel_path
-    echo "[*] panel is available at: https://${VARS[domain]}/${VARS[panel_path]}"
+    echo "[*] panel is available at: https://${VARS[domain]}${VARS[panel_path]}"
     echo "[*] panel params file: ${VARS[caddy_env]}"
     echo "[+] done, reboot"
 }
