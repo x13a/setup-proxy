@@ -29,10 +29,6 @@ ORIGIN_SUBDOMAIN=origin
 CLOUDFLARE_SUBDOMAIN=cloudflare.cdn
 # ip lookup, direct connection
 IP_SUBDOMAIN=ip
-# disabled by default, direct connection, will be sig-aabbccdd
-SIGNAL_PROXY_SUBDOMAIN=sig
-# disabled by default, direct connection, will be tg-aabbccdd
-TELEGRAM_PROXY_SUBDOMAIN=tg
 
 # redir to your domain
 # default CDN, token protected

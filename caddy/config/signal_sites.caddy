@@ -1,8 +1,0 @@
-{$SIGNAL_PROXY_SUBDOMAIN}.{$DOMAIN} {
-    abort
-}
-
-# active probing handler
-:9000 {
-    import "./abort_file_server.caddy"
-}

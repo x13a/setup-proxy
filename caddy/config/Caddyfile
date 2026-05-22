@@ -1,18 +1,7 @@
 {
     # debug
     admin off
-    # servers {
-    #     listener_wrappers {
-    #         layer4 {
-    #             # import "./signal_l4.caddy"
-    #             route
-    #         }
-    #         tls
-    #     }
-    # }
 }
-
-# import "./signal_sites.caddy"
 
 (authorization) {
     @unauthorized not header X-Auth-Token {$CDN_AUTH_TOKEN}
