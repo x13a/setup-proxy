@@ -3,39 +3,12 @@
     admin off
 }
 
-(authorization) {
-    @unauthorized not header X-Auth-Token {$CDN_AUTH_TOKEN}
-    handle @unauthorized {
-        abort
-    }
-}
-
-(rm-cdn-auth-header) {
-    header_up -X-Auth-Token
-}
-
 (proxy_handler) {
     encode
     root * /www
     route {
-        reverse_proxy {$PANEL_PATH}/* {$PANEL}:{$PANEL_PORT} {
-            import rm-cdn-auth-header
-        }
-        reverse_proxy {$SUBSCRIPTION_PATH}/* {$PANEL}:{$SUBSCRIPTION_PORT} {
-            import rm-cdn-auth-header
-        }
-        reverse_proxy {$PROXY_XHTTP_PATH}/* {$PANEL}:{$PROXY_XHTTP_PORT} {
-            import rm-cdn-auth-header
-        }
-        reverse_proxy {$PROXY_XHTTP_WARP_PATH}/* {$PANEL}:{$PROXY_XHTTP_WARP_PORT} {
-            import rm-cdn-auth-header
-        }
-        reverse_proxy {$PROXY_WEBSOCKET_PATH} {$PANEL}:{$PROXY_WEBSOCKET_PORT} {
-            import rm-cdn-auth-header
-        }
-        reverse_proxy {$PROXY_WEBSOCKET_WARP_PATH} {$PANEL}:{$PROXY_WEBSOCKET_WARP_PORT} {
-            import rm-cdn-auth-header
-        }
+        reverse_proxy {$PANEL_PATH}/* {$PANEL}:{$PANEL_PORT}
+        reverse_proxy {$SUBSCRIPTION_PATH}/* {$PANEL}:{$SUBSCRIPTION_PORT}
         handle {
             import "./basic_auth.caddy"
             file_server
@@ -43,26 +16,12 @@
     }
 }
 
-(cdn_handler) {
-    import authorization
-    import proxy_handler
-}
-
 www.{$DOMAIN} {
-    import authorization
     redir https://{$DOMAIN}{uri}
 }
 
 {$DOMAIN} {
-    import cdn_handler
-}
-
-{$ORIGIN_SUBDOMAIN}.{$DOMAIN} {
-    import cdn_handler
-}
-
-{$CLOUDFLARE_SUBDOMAIN}.{$DOMAIN} {
-    import cdn_handler
+    import proxy_handler
 }
 
 {$IP_SUBDOMAIN}.{$DOMAIN} {

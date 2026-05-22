@@ -10,7 +10,6 @@ declare -A DEFAULTS
 VARS[domain]=""
 VARS[panel]=""
 VARS[panel_path]=""
-VARS[cdn_token]=""
 VARS[caddy_env]="$BASE_DIR/caddy/caddy.env"
 VARS[sui_port]="2095"
 DEFAULTS[panel]="3x-ui"
@@ -151,10 +150,6 @@ set_panel() {
     fi
 }
 
-read_cdn_auth_token() {
-    VARS[cdn_token]="$(grep -E '^CDN_AUTH_TOKEN=' "${VARS[caddy_env]}" | cut -d'=' -f2-)"
-}
-
 handle_domain() {
     ask_domain
     set_domain
@@ -187,10 +182,8 @@ main() {
     init_panel_db
     install_sqlite
     set_panel_path
-    read_cdn_auth_token
     echo "[*] panel is available at: https://${VARS[domain]}/${VARS[panel_path]}"
     echo "[*] panel params file: ${VARS[caddy_env]}"
-    echo "[*] CDN auth token is: ${VARS[cdn_token]}"
     echo "[+] done, reboot"
 }
 
