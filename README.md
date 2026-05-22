@@ -1,4 +1,4 @@
-# proxy-host
+# setup-proxy
 
 Proxy over CDN bootstrap
 
@@ -9,8 +9,8 @@ You must have a server and domain name for this.
 Clone repository and switch into it:
 
 ```sh
-git clone https://github.com/x13a/proxy-host
-cd proxy-host
+git clone https://github.com/x13a/setup-proxy
+cd setup-proxy
 ```
 
 Run *setup.sh* file:
