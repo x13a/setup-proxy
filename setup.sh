@@ -99,9 +99,9 @@ set_panel_path() {
     docker compose -f "$compose_file" up -d
     local panel="${VARS[panel]}"
     if [ "$panel" = "3x-ui" ] || [ "$panel" = "x-ui" ]; then
-        docker exec -it $panel sh -c "/app/x-ui setting -webBasePath '$panel_path'"
+        docker exec -it "$panel" sh -c "/app/x-ui setting -webBasePath '$panel_path'"
     elif [ "$panel" = "s-ui" ]; then
-        docker exec -it $panel sh -c "/app/sui setting -path '$panel_path'"
+        docker exec -it "$panel" sh -c "/app/sui setting -path '$panel_path'"
     fi
     docker compose -f "$compose_file" down
     echo "[*] docker compose stopped"
