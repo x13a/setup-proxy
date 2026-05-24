@@ -19,16 +19,6 @@ Run *setup.sh* file:
 ./setup.sh
 ```
 
-Now you have to configure DNS records.  
-Caddy is set to use following subdomains:
-
-```env
-IP_SUBDOMAIN=ip
-
-# redir to your domain
-# www
-```
-
 ## License
 
 MIT

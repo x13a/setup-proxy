@@ -24,12 +24,6 @@ www.{$DOMAIN} {
     import proxy_handler
 }
 
-{$IP_SUBDOMAIN}.{$DOMAIN} {
-    encode
-    templates
-    respond "{{.RemoteIP}}"
-}
-
 # healthcheck
 http://localhost:8000 {
     respond "OK"
